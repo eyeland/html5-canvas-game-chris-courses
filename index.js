@@ -98,7 +98,7 @@ function spawnEnemies() {
        
         const angle = Math.atan2(canvas.height / 2 - y,
             canvas.width / 2 - x)
-        console.log(angle)
+        
     
         const velocity = {
             x: Math.cos(angle),
@@ -106,7 +106,7 @@ function spawnEnemies() {
         }
     
         enemies.push(new Enemy(x, y, radius, color, velocity))
-        console.log(enemies)
+        
     }, 1000)
 }
 
@@ -119,8 +119,21 @@ function animate() {
       projectile.update()
     })
 
-    enemies.forEach(enemy => {
+    enemies.forEach((enemy, index) => {
         enemy.update()
+
+        projectiles.forEach((projectile, projectileIndex) => {
+            const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+            
+            //object touch *collision detection
+            if(dist - enemy.radius - projectile.radius < 1) {
+                setTimeout(() => {
+                    enemies.splice(index, 1)
+                    projectiles.splice(projectileIndex, 1)
+                }, 0)
+               
+            }
+        })
     })
 }
 
